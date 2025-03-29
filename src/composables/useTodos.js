@@ -44,17 +44,18 @@ export function useTodos() {
 
   async function addTodo() {
     if (!newTodoTitle.value.trim()) return
-
+  
     try {
       const response = await api.post('/tasks', {
         title: newTodoTitle.value
       })
-      todos.value.unshift(response.data) // adiciona na lista
-      newTodoTitle.value = '' // limpa o input
+      todos.value.unshift(response.data)
+      newTodoTitle.value = ''
     } catch (error) {
       console.error('Erro ao adicionar tarefa:', error)
+      throw error
     }
-  }
+  }  
 
   async function updateTodo(id, updates) {
     try {
@@ -66,21 +67,19 @@ export function useTodos() {
       }
     } catch (error) {
       console.error('Erro ao atualizar tarefa:', error)
+      throw error
     }
-  }
+  }  
 
   async function deleteTodo(id) {
-    const confirmed = confirm('Tem certeza que deseja excluir esta tarefa?')
-    if (!confirmed) return
-  
     try {
       await api.delete(`/tasks/${id}`)
       todos.value = todos.value.filter(t => t.id !== id)
     } catch (error) {
       console.error('Erro ao deletar tarefa:', error)
-      alert('Erro ao deletar tarefa. Tente novamente.')
+      throw error
     }
-  }
+  }  
 
   function changePage(p) {
     page.value = p
