@@ -30,7 +30,7 @@ export function useTodos() {
         params.search = searchTerm.value.trim()
       }
 
-      const response = await api.get('/tasks', { params })
+      const response = await api.get('/api/tasks', { params })
 
       todos.value = response.data.tasks
       totalPages.value = Math.ceil(response.data.total / response.data.limit)
@@ -46,7 +46,7 @@ export function useTodos() {
     if (!newTodoTitle.value.trim()) return
   
     try {
-      const response = await api.post('/tasks', {
+      const response = await api.post('/api/tasks', {
         title: newTodoTitle.value
       })
       todos.value.unshift(response.data)
@@ -59,7 +59,7 @@ export function useTodos() {
 
   async function updateTodo(id, updates) {
     try {
-      const response = await api.patch(`/tasks/${id}`, updates)
+      const response = await api.patch(`/api/tasks/${id}`, updates)
   
       const index = todos.value.findIndex(t => t.id === id)
       if (index !== -1) {
@@ -73,7 +73,7 @@ export function useTodos() {
 
   async function deleteTodo(id) {
     try {
-      await api.delete(`/tasks/${id}`)
+      await api.delete(`/api/tasks/${id}`)
       todos.value = todos.value.filter(t => t.id !== id)
     } catch (error) {
       console.error('Erro ao deletar tarefa:', error)
